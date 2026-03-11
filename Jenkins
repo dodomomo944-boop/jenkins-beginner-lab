@@ -1,0 +1,36 @@
+pipeline {
+   agent any
+ environment {
+   APP_NAME = 'beginner-app'
+ }
+   stages {
+     stage('Checkout') {
+       steps {
+         echo "Checking out code for ${APP_NAME}..."
+         checkout scm
+       }
+      }
+       stage('Build') {
+         steps {
+           echo 'Simulating a build...'
+           sh 'echo Build output > build-output.txt'
+           sh 'cat build-output.txt'
+         }
+      }
+       stage('Test') {
+         steps {
+         echo 'Simulating tests...'
+         sh 'echo All tests passed!'
+         }
+       }
+     }
+     post {
+       success {
+         echo 'Pipeline completed successfully!'
+         archiveArtifacts artifacts: 'build-output.txt'
+       }
+       failure {
+         echo 'Pipeline failed. Check the Console Output.'
+       }
+   }
+}
